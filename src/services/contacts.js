@@ -47,3 +47,4 @@ export const deletContact = async (id) => {
     const result = await contactCollection.findOneAndDelete({ _id: id });
     return result;
 };
+
