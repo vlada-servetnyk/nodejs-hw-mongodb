@@ -2,6 +2,11 @@ import { Schema, model } from "mongoose";
 import { contactTypeList } from "../../constants/contacts.js";
 
 const contactSchema = new Schema({
+    userId: {
+        type:  Schema.Types.ObjectId,
+        ref: 'user',
+        require: true
+    },
     name: {
         type: String,
         require: true

@@ -6,7 +6,8 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 export const getContactsController = async (req, res) => {
     const paginationParams = parsePaginationParams(req.query);
     const sortParams = parseSortParams(req.query);
-    const data = await getContacts({...paginationParams, ...sortParams});
+    const userId = req.user._id;
+    const data = await getContacts({userId, ...paginationParams, ...sortParams});
 
     res.json({
         status: 200,
@@ -32,7 +33,10 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const createNewContactController = async (req, res) => {
-    const newContact = await createContact(req.body);
+    console.log(req.user);
+    
+    const { _id: userId } = req.user;
+    const newContact = await createContact({...req.body, userId});
     
     res.status(201).json({
     status: 201,
