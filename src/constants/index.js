@@ -11,3 +11,4 @@ export const SMTP = {
 };
 
 export const TEMPLATES_DIR = path.resolve("src", "templates");
+export const TEMPORARY_FILE_DIR = path.resolve("temp");

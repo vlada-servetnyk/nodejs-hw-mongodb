@@ -147,7 +147,7 @@ export const resetPassword = async (payload) => {
     entries = jwt.verify(payload.token, jwtSecret);
   } catch (err) {
     if (err instanceof Error)
-        throw createHttpError(401, err.message);
+        throw createHttpError(401, 'Token is expired or invalid');
         throw err;
   }
 
@@ -165,5 +165,8 @@ export const resetPassword = async (payload) => {
   await UserCollection.updateOne(
     { _id: user._id },
     { password: encryptedPassword },
-  );
+    );
+    
+    await SessionCollection.deleteOne({ userId: user._id });
 };
+
