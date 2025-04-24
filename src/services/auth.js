@@ -5,6 +5,12 @@ import SessionCollection from "../db/model/Session.js";
 import {randomBytes} from "node:crypto";
 import { accessTokenLifeTime, refreshTokenLifeTime } from "../constants/auth.js";
 
+import jwt from 'jsonwebtoken';
+import { SMTP } from '../constants/index.js';
+import { getEnvVar } from '../utils/getEnvVar.js';
+import { sendEmail } from '../utils/sendMail.js';
+
+
 const newSession = () => {
     const accessToken = randomBytes(30).toString("base64");
     const refreshToken = randomBytes(30).toString("base64");
@@ -81,4 +87,30 @@ export const refreshUser = async ({ refreshToken, sessionId }) => {
     });
 };
 
-export const logoutUser = sessionId => SessionCollection.deleteOne({_id: sessionId});
+export const logoutUser = sessionId => SessionCollection.deleteOne({ _id: sessionId });
+
+export const sendEmailReset = async (email) => {
+    const user = await UserCollection.findOne({ email });
+    
+    if (!user) {
+        throw createHttpError(404, 'User not found');
+    };
+
+    const resetToken = jwt.sign(
+        {
+        sub: user._id,
+        email,
+        },
+    getEnvVar("JWT_SECRET"),
+        {
+        expiresIn: '15m',
+        },
+    );
+
+    await sendEmail({
+        from: getEnvVar(SMTP.SMTP_FROM),
+        to: email,
+        subject: 'Reset your password',
+        html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
+    });
+};
