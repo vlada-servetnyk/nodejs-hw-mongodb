@@ -10,7 +10,7 @@ tags:
   - name: Contacts
     description: Operations about contacts.
 servers:
-  - url: http://localhost:3000
+  - url: https://nodejs-hw-swagger-xzhc.onrender.com/api-docs/
   - url: https://example.com/api/v1
 paths:
   /contacts:
