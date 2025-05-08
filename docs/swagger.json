@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "https://nodejs-hw-swagger-xzhc.onrender.com/api-docs/"
+      "url": "https://nodejs-hw-swagger-xzhc.onrender.com"
     },
     {
       "url": "https://example.com/api/v1"
@@ -242,6 +242,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
           },
           "401": {
             "$ref": "#/components/responses/401"
@@ -530,25 +533,46 @@
     },
     "responses": {
       "400": {
-        "description": "Validation id error",
+        "description": "Validation error (invalid ID or body)",
         "content": {
           "application/json": {
             "schema": {
-              "type": "object",
-              "required": [
-                "status",
-                "message"
-              ],
-              "properties": {
-                "status": {
-                  "type": "integer",
-                  "example": 400
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid ID format"
+                    }
+                  }
                 },
-                "message": {
-                  "type": "string",
-                  "example": "680b63f190fccc9837fae76d not valid id"
+                {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid request body"
+                    }
+                  }
                 }
-              }
+              ]
             }
           }
         }

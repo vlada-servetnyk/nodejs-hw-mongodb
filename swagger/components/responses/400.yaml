@@ -1,15 +1,27 @@
-description: Validation id error
+description: Validation error (invalid ID or body)
 content:
   application/json:
     schema:
-      type: object
-      required:
-        - status
-        - message
-      properties:
-        status:
-          type: integer
-          example: 400
-        message:
-          type: string
-          example: '680b63f190fccc9837fae76d not valid id'
+      oneOf:
+        - type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Invalid ID format'
+        - type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Invalid request body'
